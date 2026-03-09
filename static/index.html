@@ -686,11 +686,96 @@
             <div id="brokers" class="page">
                 <div class="alert alert-info">
                     <span>ℹ️</span>
-                    Configure your brokers here. Only one broker can be active at a time.
+                    Connect your broker account to start trading. Credentials are stored securely.
                 </div>
                 
-                <div class="broker-grid" id="broker-grid">
-                    <!-- Broker cards will be populated by JS -->
+                <!-- Connection Status -->
+                <div class="card" id="broker-status-card">
+                    <div class="card-header">
+                        <span class="card-title">Connection Status</span>
+                        <span id="connection-badge" class="badge" style="background: var(--bg-hover); color: var(--text-secondary);">Disconnected</span>
+                    </div>
+                    <p id="broker-status-text" style="color: var(--text-secondary);">
+                        No broker connected. Configure below to connect.
+                    </p>
+                </div>
+                
+                <!-- Tradovate Configuration -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🏦 Tradovate</span>
+                        <span class="badge" style="background: rgba(0, 255, 136, 0.15); color: var(--accent-green);">Recommended</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="tradovate-username" placeholder="your-username">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="tradovate-password" placeholder="your-password">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Account ID (optional)</label>
+                            <input type="text" id="tradovate-account" placeholder="Auto-detect">
+                        </div>
+                        <div class="form-group">
+                            <label>Mode</label>
+                            <select id="tradovate-demo">
+                                <option value="true">Demo/Paper Trading</option>
+                                <option value="false">Live Trading</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-success" onclick="connectTradovate()">
+                            🔗 Connect Tradovate
+                        </button>
+                    </div>
+                    
+                    <div id="tradovate-result" style="margin-top: 1rem; display: none;"></div>
+                </div>
+                
+                <!-- TradeStation Configuration -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🏛️ TradeStation</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>API Key</label>
+                            <input type="text" id="ts-api-key" placeholder="your-api-key">
+                        </div>
+                        <div class="form-group">
+                            <label>API Secret</label>
+                            <input type="password" id="ts-api-secret" placeholder="your-api-secret">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Account ID</label>
+                            <input type="text" id="ts-account" placeholder="your-account-id">
+                        </div>
+                        <div class="form-group">
+                            <label>Refresh Token (optional)</label>
+                            <input type="text" id="ts-refresh" placeholder="your-refresh-token">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary" onclick="connectTradeStation()">
+                            🔗 Connect TradeStation
+                        </button>
+                    </div>
+                    
+                    <div id="ts-result" style="margin-top: 1rem; display: none;"></div>
                 </div>
             </div>
             
@@ -983,6 +1068,103 @@
                 'tradestation': 'Advanced futures broker with OAuth2. More features.'
             };
             return descs[broker] || 'Custom broker configuration';
+        }
+        
+        // Broker Configuration Functions
+        async function connectTradovate() {
+            const username = document.getElementById('tradovate-username').value;
+            const password = document.getElementById('tradovate-password').value;
+            const account = document.getElementById('tradovate-account').value;
+            const demo = document.getElementById('tradovate-demo').value === 'true';
+            const resultDiv = document.getElementById('tradovate-result');
+            
+            if (!username || !password) {
+                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ Username and password required</div>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="alert alert-info">⏳ Connecting to Tradovate...</div>';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const res = await fetch('/configure/broker', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        broker_type: 'tradovate',
+                        username: username,
+                        password: password,
+                        account_id: account,
+                        demo: demo
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(0,255,136,0.15); color: var(--accent-green);">✅ ' + data.message + '</div>';
+                    updateConnectionStatus('tradovate', 'Connected');
+                } else {
+                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ ' + data.message + '</div>';
+                }
+            } catch (e) {
+                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ Error: ' + e.message + '</div>';
+            }
+        }
+        
+        async function connectTradeStation() {
+            const apiKey = document.getElementById('ts-api-key').value;
+            const apiSecret = document.getElementById('ts-api-secret').value;
+            const account = document.getElementById('ts-account').value;
+            const refresh = document.getElementById('ts-refresh').value;
+            const resultDiv = document.getElementById('ts-result');
+            
+            if (!apiKey || !apiSecret) {
+                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ API key and secret required</div>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="alert alert-info">⏳ Connecting to TradeStation...</div>';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const res = await fetch('/configure/broker', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        broker_type: 'tradestation',
+                        api_key: apiKey,
+                        api_secret: apiSecret,
+                        account_id: account,
+                        refresh_token: refresh,
+                        demo: true
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(0,255,136,0.15); color: var(--accent-green);">✅ ' + data.message + '</div>';
+                    updateConnectionStatus('tradestation', 'Connected');
+                } else {
+                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ ' + data.message + '</div>';
+                }
+            } catch (e) {
+                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ Error: ' + e.message + '</div>';
+            }
+        }
+        
+        function updateConnectionStatus(broker, status) {
+            const badge = document.getElementById('connection-badge');
+            const text = document.getElementById('broker-status-text');
+            
+            badge.textContent = status;
+            badge.style.background = 'rgba(0, 255, 136, 0.15)';
+            badge.style.color = 'var(--accent-green)';
+            text.textContent = broker.charAt(0).toUpperCase() + broker.slice(1) + ' is connected and ready to trade.';
+            text.style.color = 'var(--text-primary)';
         }
         
         // Webhook tester

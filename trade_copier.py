@@ -788,6 +788,85 @@ python trade_copier.py
 """
 
 
+@app.route('/brokers/available')
+def available_brokers():
+    """List all registered brokers and their status"""
+    brokers = BrokerRegistry.list_brokers()
+    available = [b for b in brokers if BrokerRegistry.get_broker(b)]
+    
+    return jsonify({
+        'registered': brokers,
+        'configured': available,
+        'active': config.ACTIVE_BROKER
+    })
+
+
+@app.route('/configure/broker', methods=['POST'])
+def configure_broker():
+    """Configure broker credentials from dashboard"""
+    try:
+        data = request.get_json()
+        broker_type = data.get('broker_type', 'tradovate')
+        
+        if broker_type == 'tradovate':
+            username = data.get('username')
+            password = data.get('password')
+            account_id = data.get('account_id')
+            demo = data.get('demo', True)
+            
+            if not username or not password:
+                return jsonify({'status': 'error', 'message': 'Username and password required'}), 400
+            
+            # Create and register Tradovate broker
+            broker = TradovateBroker(
+                username=username,
+                password=password,
+                account_id=account_id,
+                demo=demo
+            )
+            
+            # Test authentication
+            if broker.authenticate():
+                BrokerRegistry._instances['tradovate'] = broker
+                config.ACTIVE_BROKER = 'tradovate'
+                logger.info(f"Tradovate configured for user: {username}")
+                return jsonify({'status': 'success', 'message': 'Tradovate connected'}), 200
+            else:
+                return jsonify({'status': 'error', 'message': 'Authentication failed'}), 401
+                
+        elif broker_type == 'tradestation':
+            api_key = data.get('api_key')
+            api_secret = data.get('api_secret')
+            account_id = data.get('account_id')
+            refresh_token = data.get('refresh_token')
+            demo = data.get('demo', True)
+            
+            if not api_key or not api_secret:
+                return jsonify({'status': 'error', 'message': 'API key and secret required'}), 400
+            
+            broker = TradeStationBroker(
+                api_key=api_key,
+                api_secret=api_secret,
+                account_id=account_id,
+                refresh_token=refresh_token,
+                demo=demo
+            )
+            
+            if broker.authenticate():
+                BrokerRegistry._instances['tradestation'] = broker
+                config.ACTIVE_BROKER = 'tradestation'
+                return jsonify({'status': 'success', 'message': 'TradeStation connected'}), 200
+            else:
+                return jsonify({'status': 'error', 'message': 'Authentication failed'}), 401
+        
+        else:
+            return jsonify({'status': 'error', 'message': f'Unknown broker: {broker_type}'}), 400
+            
+    except Exception as e:
+        logger.error(f"Configure broker error: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
 # ========== MAIN ==========
 if __name__ == '__main__':
     logger.info("="*50)
