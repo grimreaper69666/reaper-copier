@@ -1,0 +1,162 @@
+/* Mobile Optimizations for Reaper Trade Copier */
+
+@media (max-width: 768px) {
+    /* Header */
+    .header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .logo-text h1 {
+        font-size: 1rem;
+    }
+    
+    .logo-text span {
+        display: none;
+    }
+    
+    .status-badge span {
+        display: none;
+    }
+    
+    /* Layout - Stack sidebar on mobile */
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+    
+    /* Mobile Navigation - Bottom bar */
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.5rem;
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border);
+        border-right: none;
+        z-index: 100;
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .nav-section {
+        display: flex;
+        margin: 0;
+        gap: 0.5rem;
+    }
+    
+    .nav-section h3 {
+        display: none;
+    }
+    
+    .nav-item {
+        flex-direction: column;
+        padding: 0.5rem;
+        font-size: 0.7rem;
+        min-width: 60px;
+        text-align: center;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .nav-item.active {
+        border-left: none;
+        border-bottom-color: var(--accent-green);
+    }
+    
+    .nav-item span {
+        font-size: 1.25rem;
+    }
+    
+    /* Main content - Add bottom padding for nav */
+    .main {
+        padding: 1rem;
+        padding-bottom: 80px;
+    }
+    
+    /* Stats - 2 columns on mobile */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    /* Tables - Horizontal scroll */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        font-size: 0.875rem;
+    }
+    
+    th, td {
+        padding: 0.75rem 0.5rem;
+        white-space: nowrap;
+    }
+    
+    /* Forms - Full width inputs */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Cards */
+    .card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+    
+    /* Broker cards - Stack */
+    .broker-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Buttons */
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Webhook tester */
+    .json-editor {
+        font-size: 0.75rem;
+        min-height: 150px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 380px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+        font-size: 1.75rem;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) {
+    .nav-item, .btn, .tab {
+        min-height: 44px;
+    }
+    
+    input, select, textarea {
+        font-size: 16px;
+    }
+}

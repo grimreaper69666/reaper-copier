@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: reaper-copier
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python trade_copier.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 10000
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: ACTIVE_BROKER
+        value: tradovate
+      - key: TRADOVATE_DEMO
+        value: "True"
+      - key: ACCOUNT_SIZE
+        value: "10000"
+      - key: RISK_PER_TRADE
+        value: "0.02"
+      - key: SIZING_MODE
+        value: risk

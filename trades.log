@@ -1,0 +1,80 @@
+2026-03-09 13:39:39,723 - __main__ - INFO - Registered broker: tradovate
+2026-03-09 13:39:39,723 - __main__ - INFO - Registered broker: tradestation
+2026-03-09 13:39:39,723 - __main__ - INFO - ==================================================
+2026-03-09 13:39:39,723 - __main__ - INFO - REAPER TRADE COPIER v3.0
+2026-03-09 13:39:39,723 - __main__ - INFO - ==================================================
+2026-03-09 13:39:39,723 - __main__ - INFO - Brokers: ['tradovate', 'tradestation']
+2026-03-09 13:39:39,723 - __main__ - INFO - Active: tradovate
+2026-03-09 13:39:39,723 - __main__ - INFO - Account: $10000.0
+2026-03-09 13:39:39,724 - __main__ - INFO - Sizing: risk
+2026-03-09 13:39:39,724 - __main__ - INFO - ==================================================
+2026-03-09 13:39:44,733 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.0.91:5001
+2026-03-09 13:39:44,733 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 13:39:47,765 - __main__ - INFO - Registered broker: tradovate
+2026-03-09 13:39:47,765 - __main__ - INFO - Registered broker: tradestation
+2026-03-09 13:39:47,766 - __main__ - INFO - ==================================================
+2026-03-09 13:39:47,766 - __main__ - INFO - REAPER TRADE COPIER v3.0
+2026-03-09 13:39:47,766 - __main__ - INFO - ==================================================
+2026-03-09 13:39:47,766 - __main__ - INFO - Brokers: ['tradovate', 'tradestation']
+2026-03-09 13:39:47,766 - __main__ - INFO - Active: tradovate
+2026-03-09 13:39:47,766 - __main__ - INFO - Account: $10000.0
+2026-03-09 13:39:47,766 - __main__ - INFO - Sizing: risk
+2026-03-09 13:39:47,766 - __main__ - INFO - ==================================================
+2026-03-09 13:39:59,780 - __main__ - INFO - Registered broker: tradovate
+2026-03-09 13:39:59,780 - __main__ - INFO - Registered broker: tradestation
+2026-03-09 13:39:59,781 - __main__ - INFO - ==================================================
+2026-03-09 13:39:59,781 - __main__ - INFO - REAPER TRADE COPIER v3.0
+2026-03-09 13:39:59,781 - __main__ - INFO - ==================================================
+2026-03-09 13:39:59,781 - __main__ - INFO - Brokers: ['tradovate', 'tradestation']
+2026-03-09 13:39:59,781 - __main__ - INFO - Active: tradovate
+2026-03-09 13:39:59,781 - __main__ - INFO - Account: $10000.0
+2026-03-09 13:39:59,781 - __main__ - INFO - Sizing: risk
+2026-03-09 13:39:59,781 - __main__ - INFO - ==================================================
+2026-03-09 13:40:04,792 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.0.91:5002
+2026-03-09 13:40:04,792 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 13:40:06,207 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 13:40:06] "GET /status HTTP/1.1" 200 -
+2026-03-09 13:40:09,297 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 13:40:09] "GET /brokers HTTP/1.1" 200 -
+2026-03-09 13:40:13,956 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 13:40:13] "POST /webhook HTTP/1.1" 200 -
+2026-03-09 13:40:18,642 - __main__ - INFO - Tradovate: Authenticated
+2026-03-09 13:40:18,796 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 13:40:18] "[35m[1mPOST /webhook HTTP/1.1[0m" 500 -
+2026-03-09 13:40:22,003 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 13:40:22] "GET / HTTP/1.1" 200 -
+2026-03-09 13:40:26,306 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 13:40:26] "[31m[1mPOST /webhook HTTP/1.1[0m" 403 -
+2026-03-09 14:01:22,408 - __main__ - INFO - Registered broker: tradovate
+2026-03-09 14:01:22,409 - __main__ - INFO - Registered broker: tradestation
+2026-03-09 14:01:22,409 - __main__ - INFO - ==================================================
+2026-03-09 14:01:22,409 - __main__ - INFO - REAPER TRADE COPIER v3.0
+2026-03-09 14:01:22,409 - __main__ - INFO - ==================================================
+2026-03-09 14:01:22,409 - __main__ - INFO - Brokers: ['tradovate', 'tradestation']
+2026-03-09 14:01:22,409 - __main__ - INFO - Active: tradovate
+2026-03-09 14:01:22,409 - __main__ - INFO - Account: $10000.0
+2026-03-09 14:01:22,409 - __main__ - INFO - Sizing: risk
+2026-03-09 14:01:22,409 - __main__ - INFO - ==================================================
+2026-03-09 14:01:27,420 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5003
+ * Running on http://192.168.0.91:5003
+2026-03-09 14:01:27,420 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 14:01:28,486 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 14:01:28] "GET / HTTP/1.1" 200 -
+2026-03-09 14:01:31,929 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 14:01:31] "GET /status HTTP/1.1" 200 -
+2026-03-09 14:09:50,830 - __main__ - INFO - Registered broker: tradovate
+2026-03-09 14:09:50,830 - __main__ - INFO - Registered broker: tradestation
+2026-03-09 14:09:50,831 - __main__ - INFO - ==================================================
+2026-03-09 14:09:50,831 - __main__ - INFO - REAPER TRADE COPIER v3.0
+2026-03-09 14:09:50,831 - __main__ - INFO - ==================================================
+2026-03-09 14:09:50,831 - __main__ - INFO - Brokers: ['tradovate', 'tradestation']
+2026-03-09 14:09:50,831 - __main__ - INFO - Active: tradovate
+2026-03-09 14:09:50,831 - __main__ - INFO - Account: $10000.0
+2026-03-09 14:09:50,831 - __main__ - INFO - Sizing: risk
+2026-03-09 14:09:50,831 - __main__ - INFO - ==================================================
+2026-03-09 14:09:55,838 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.91:5000
+2026-03-09 14:09:55,838 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 14:12:10,689 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 14:12:10] "GET /status HTTP/1.1" 200 -

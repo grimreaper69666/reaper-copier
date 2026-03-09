@@ -1,0 +1,10 @@
+{
+  "secret": "your-secret-key-here",
+  "symbol": "MNQ",
+  "side": "LONG",
+  "price": 24368.00,
+  "stop_loss": 24200.00,
+  "take_profit": 24500.00,
+  "strategy": "LuxMACD+",
+  "timeframe": "1min"
+}
