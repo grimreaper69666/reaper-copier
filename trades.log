@@ -78,3 +78,17 @@
  * Running on http://192.168.0.91:5000
 2026-03-09 14:09:55,838 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
 2026-03-09 14:12:10,689 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2026 14:12:10] "GET /status HTTP/1.1" 200 -
+2026-03-09 14:43:30,582 - __main__ - INFO - Registered broker: tradovate
+2026-03-09 14:43:30,582 - __main__ - INFO - Registered broker: tradestation
+2026-03-09 14:43:30,583 - __main__ - INFO - ==================================================
+2026-03-09 14:43:30,583 - __main__ - INFO - REAPER TRADE COPIER v3.0
+2026-03-09 14:43:30,583 - __main__ - INFO - ==================================================
+2026-03-09 14:43:30,583 - __main__ - INFO - Brokers: ['tradovate', 'tradestation']
+2026-03-09 14:43:30,583 - __main__ - INFO - Active: tradovate
+2026-03-09 14:43:30,583 - __main__ - INFO - Account: $10000.0
+2026-03-09 14:43:30,583 - __main__ - INFO - Sizing: risk
+2026-03-09 14:43:30,583 - __main__ - INFO - ==================================================
+2026-03-09 14:43:30,583 - __main__ - WARNING - WARNING: tradovate not configured!
+2026-03-09 14:43:30,583 - __main__ - INFO - Set environment variables for your broker:
+2026-03-09 14:43:30,583 - __main__ - INFO -   Tradovate: TRADOVATE_USERNAME, TRADOVATE_PASSWORD
+2026-03-09 14:43:30,583 - __main__ - INFO -   TradeStation: TRADESTATION_API_KEY, TRADESTATION_API_SECRET

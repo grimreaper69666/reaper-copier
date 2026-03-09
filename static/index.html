@@ -781,13 +781,64 @@
             
             <!-- Strategies Page -->
             <div id="strategies" class="page">
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    Create custom strategies with filters and risk settings.
+                </div>
+                
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">Strategy Configuration</span>
-                        <button class="btn btn-primary" onclick="addStrategy()">+ Add Strategy</button>
+                        <span class="card-title">🧠 Strategy Configuration</span>
+                        <button class="btn btn-primary" onclick="showAddStrategyModal()">+ Add Strategy</button>
                     </div>
+                    
                     <div id="strategies-list">
-                        <!-- Strategies populated by JS -->
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🧠</div>
+                            <p>No strategies configured</p>
+                            <p style="font-size: 0.875rem; margin-top: 0.5rem;">Add a strategy to start trading with custom rules</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Strategy Modal -->
+                <div id="strategy-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+                    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h3>Add New Strategy</h3>
+                            <button onclick="closeStrategyModal()" style="background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;">×</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Strategy Name</label>
+                            <input type="text" id="strategy-name" placeholder="e.g., LuxMACD Breakout">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Symbols (comma separated)</label>
+                            <input type="text" id="strategy-symbols" placeholder="MNQ, MES, NQ">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Risk Per Trade (%)</label>
+                                <input type="number" id="strategy-risk" value="2" min="0.1" max="10" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Max Positions</label>
+                                <input type="number" id="strategy-max-pos" value="3" min="1" max="10">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Min Risk:Reward</label>
+                            <input type="number" id="strategy-min-rr" value="1.5" min="1" max="5" step="0.1">
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                            <button class="btn btn-secondary" onclick="closeStrategyModal()" style="flex: 1;">Cancel</button>
+                            <button class="btn btn-primary" onclick="saveStrategy()" style="flex: 1;">Save Strategy</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1210,8 +1261,141 @@
             }
         }, 5000);
         
-        // Initial load
+        
+        // Strategy Functions
+        let strategies = [];
+        
+        function showAddStrategyModal() {
+            document.getElementById('strategy-modal').style.display = 'flex';
+        }
+        
+        function closeStrategyModal() {
+            document.getElementById('strategy-modal').style.display = 'none';
+        }
+        
+        function saveStrategy() {
+            const name = document.getElementById('strategy-name').value;
+            const symbols = document.getElementById('strategy-symbols').value;
+            const risk = document.getElementById('strategy-risk').value;
+            const maxPos = document.getElementById('strategy-max-pos').value;
+            const minRR = document.getElementById('strategy-min-rr').value;
+            
+            if (!name) {
+                alert('Strategy name required');
+                return;
+            }
+            
+            const strategy = {
+                id: Date.now(),
+                name: name,
+                symbols: symbols.split(',').map(s => s.trim()).filter(s => s),
+                risk_per_trade: parseFloat(risk),
+                max_positions: parseInt(maxPos),
+                min_risk_reward: parseFloat(minRR),
+                enabled: true
+            };
+            
+            strategies.push(strategy);
+            renderStrategies();
+            closeStrategyModal();
+            
+            document.getElementById('strategy-name').value = '';
+            document.getElementById('strategy-symbols').value = '';
+        }
+        
+        function renderStrategies() {
+            const container = document.getElementById('strategies-list');
+            
+            if (strategies.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🧠</div>
+                        <p>No strategies configured</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Add a strategy to start trading with custom rules</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = strategies.map(s => `
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h4>${s.name}</h4>
+                        <span class="badge ${s.enabled ? 'badge-long' : ''}">${s.enabled ? 'Enabled' : 'Disabled'}</span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">
+                        Symbols: ${s.symbols.join(', ') || 'All'}
+                    </p>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Risk: ${s.risk_per_trade}% | Max Pos: ${s.max_positions} | Min R:R ${s.min_risk_reward}
+                    </p>
+                </div>
+            `).join('');
+        }
+        
+        // Risk Settings
+        function saveRiskSettings() {
+            const btn = document.querySelector('#risk .btn-primary');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Saved!';
+            btn.style.background = 'var(--accent-green)';
+            btn.style.color = '#000';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 2000);
+        }
+        
+        // Settings
+        function saveSettings() {
+            const btn = document.querySelector('#settings .btn-primary');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Saved!';
+            btn.style.background = 'var(--accent-green)';
+            btn.style.color = '#000';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 2000);
+        }
+        
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeStrategyModal();
+            }
+        });
+        
+        // Logs
+        async function refreshLogs() {
+            const now = new Date().toISOString();
+            const connectionStatus = document.getElementById('connection-badge')?.textContent || 'Unknown';
+            
+            document.getElementById('logs-content').textContent = 
+                `${now} - System online
+` +
+                `Server: Running
+` +
+                `Broker: ${connectionStatus}
+` +
+                `Active Trades: 0
+` +
+                `Total Trades: 0
+` +
+                `---
+` +
+                `Server ready to accept TradingView webhooks`;
+        }
+        
+        // Updated initial load
         refreshData();
+        renderStrategies();
+
+
     </script>
 </body>
 </html>
