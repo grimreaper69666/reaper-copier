@@ -2,386 +2,170 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0a0a0f">
-    <title>Reaper Trade Copier - Mission Control</title>
-    <link rel="stylesheet" href="mobile.css?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaper Copier</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a25;
-            --bg-hover: #252535;
-            --text-primary: #ffffff;
-            --text-secondary: #888899;
-            --accent-green: #00ff88;
-            --accent-red: #ff4444;
-            --accent-blue: #4488ff;
-            --accent-yellow: #ffaa00;
-            --border: #2a2a3a;
+            --bg: #0a0a0f;
+            --card: #12121a;
+            --border: #1f1f2e;
+            --text: #e6e6e6;
+            --text-dim: #888;
+            --green: #00d084;
+            --red: #ef4444;
+            --blue: #3b82f6;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
         }
         
         /* Header */
         .header {
-            background: var(--bg-secondary);
+            background: var(--card);
             border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
+        }
+        
+        .logo { font-size: 1.25rem; font-weight: 600; }
+        .status { font-size: 0.875rem; color: var(--green); }
+        
+        /* Mobile Nav */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
             z-index: 100;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .logo-text h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .logo-text span {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-        
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent-green);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        /* Layout */
-        .container {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            min-height: calc(100vh - 73px);
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border);
-            padding: 1.5rem 1rem;
-        }
-        
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-        
-        .nav-section h3 {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem;
-            padding-left: 0.75rem;
         }
         
         .nav-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            padding: 0.75rem;
-            border-radius: 8px;
+            padding: 0.5rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.625rem;
+            border: none;
+            background: none;
             cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
         }
         
-        .nav-item:hover, .nav-item.active {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-        
-        .nav-item.active {
-            border-left: 3px solid var(--accent-green);
-        }
+        .nav-item.active { color: var(--green); }
+        .nav-item span { font-size: 1.25rem; margin-bottom: 2px; }
         
         /* Main Content */
         .main {
-            padding: 2rem;
-            overflow-y: auto;
+            padding: 1rem;
+            padding-bottom: 80px;
         }
         
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-        }
+        .page { display: none; }
+        .page.active { display: block; }
         
         /* Cards */
         .card {
-            background: var(--bg-card);
+            background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 8px;
+            padding: 1rem;
             margin-bottom: 1rem;
         }
         
         .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
         }
         
-        /* Stats Grid */
+        /* Stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
         }
         
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+        .stat {
+            text-align: center;
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
         }
         
-        .stat-value.positive { color: var(--accent-green); }
-        .stat-value.negative { color: var(--accent-red); }
-        
-        .stat-change {
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-        
-        /* Tables */
-        .table-container {
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        th {
+        .stat-label {
             font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        
-        tr:hover {
-            background: var(--bg-hover);
-        }
-        
-        .badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .badge-long {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
-        }
-        
-        .badge-short {
-            background: rgba(255, 68, 68, 0.15);
-            color: var(--accent-red);
+            color: var(--text-dim);
+            margin-top: 0.25rem;
         }
         
         /* Forms */
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
         }
         
         label {
             display: block;
             font-size: 0.875rem;
             margin-bottom: 0.5rem;
-            color: var(--text-secondary);
+            color: var(--text-dim);
         }
         
-        input, select, textarea {
+        input, select {
             width: 100%;
-            padding: 0.75rem 1rem;
-            background: var(--bg-secondary);
+            padding: 0.75rem;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: border-color 0.2s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 1rem;
         }
         
         /* Buttons */
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--blue);
+            color: white;
             border: none;
-            font-size: 0.875rem;
+            border-radius: 6px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
         }
         
-        .btn-primary {
-            background: var(--accent-blue);
-            color: white;
-        }
+        .btn-success { background: var(--green); color: black; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        .btn-primary:hover {
-            background: #3377ee;
-        }
-        
-        .btn-success {
-            background: var(--accent-green);
-            color: #000;
-        }
-        
-        .btn-danger {
-            background: var(--accent-red);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-        
-        /* Broker Cards */
-        .broker-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-        
-        .broker-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            position: relative;
-        }
-        
-        .broker-card.active {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
-        }
-        
-        .broker-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .broker-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        
-        .broker-status {
-            font-size: 0.75rem;
-            padding: 4px 12px;
-            border-radius: 12px;
-            background: var(--bg-hover);
-        }
-        
-        .broker-status.connected {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
-        }
-        
-        /* Toggle Switch */
+        /* Toggle */
         .toggle {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0.75rem;
+            margin: 1rem 0;
         }
         
         .switch {
             position: relative;
-            width: 50px;
-            height: 26px;
+            width: 48px;
+            height: 24px;
         }
         
         .switch input {
@@ -393,1088 +177,279 @@
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-hover);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--border);
+            border-radius: 24px;
             transition: 0.3s;
-            border-radius: 26px;
         }
         
         .slider:before {
             position: absolute;
             content: "";
-            height: 20px;
-            width: 20px;
+            height: 18px;
+            width: 18px;
             left: 3px;
             bottom: 3px;
             background: white;
-            transition: 0.3s;
             border-radius: 50%;
+            transition: 0.3s;
         }
         
-        input:checked + .slider {
-            background: var(--accent-green);
-        }
+        input:checked + .slider { background: var(--green); }
+        input:checked + .slider:before { transform: translateX(24px); }
         
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-        
-        /* Webhook Tester */
-        .webhook-tester {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-        
-        .json-editor {
-            font-family: 'Monaco', 'Menlo', monospace;
-            background: #0d0d15;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            min-height: 200px;
-            color: var(--accent-green);
+        /* Tables */
+        table {
+            width: 100%;
             font-size: 0.875rem;
-            resize: vertical;
+            border-collapse: collapse;
         }
         
-        .response-box {
-            background: #0d0d15;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-            min-height: 100px;
-            font-family: monospace;
-            font-size: 0.875rem;
-        }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+        th {
+            text-align: left;
+            padding: 0.75rem 0.5rem;
+            color: var(--text-dim);
+            font-weight: 500;
             border-bottom: 1px solid var(--border);
         }
         
-        .tab {
-            padding: 0.75rem 1.5rem;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            color: var(--text-secondary);
-            transition: all 0.2s;
+        td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
         
-        .tab:hover, .tab.active {
-            color: var(--text-primary);
-            border-bottom-color: var(--accent-blue);
-        }
-        
-        /* Alert */
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .alert-info {
-            background: rgba(68, 136, 255, 0.1);
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-        }
-        
-        /* Empty State */
-        .empty-state {
+        .empty {
             text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
+            padding: 3rem 1rem;
+            color: var(--text-dim);
         }
         
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
+        
+        .badge-green { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+        .badge-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <div class="logo-icon">🎯</div>
-            <div class="logo-text">
-                <h1>Reaper Trade Copier</h1>
-                <span>Mission Control v3.0</span>
-            </div>
-        </div>
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            <span id="connection-status">System Online</span>
-        </div>
-    </div>
+    <header class="header">
+        <div class="logo">🎯 Reaper</div>
+        <div class="status" id="status">● Online</div>
+    </header>
     
-    <div class="container">
-        <aside class="sidebar">
-            <div class="nav-section">
-                <h3>Overview</h3>
-                <div class="nav-item active" onclick="showPage('dashboard')" data-short="Dash">
-                    <span>📊</span> Dashboard
-                </div>
-                <div class="nav-item" onclick="showPage('positions')" data-short="Pos">
-                    <span>📈</span> Positions
-                </div>
-                <div class="nav-item" onclick="showPage('history')" data-short="Hist">
-                    <span>📜</span> Trade History
-                </div>
-            </div>
-            
-            <div class="nav-section">
-                <h3>Configuration</h3>
-                <div class="nav-item" onclick="showPage('brokers')" data-short="Broker">
-                    <span>🏦</span> Brokers
-                </div>
-                <div class="nav-item" onclick="showPage('strategies')" data-short="Strat">
-                    <span>🧠</span> Strategies
-                </div>
-                <div class="nav-item" onclick="showPage('risk')" data-short="Risk">
-                    <span>🛡️</span> Risk Settings
-                </div>
-            </div>
-            
-            <div class="nav-section">
-                <h3>Tools</h3>
-                <div class="nav-item" onclick="showPage('webhook')" data-short="Hook">
-                    <span>🔔</span> Webhook Tester
-                </div>
-                <div class="nav-item" onclick="showPage('logs')" data-short="Logs">
-                    <span>📋</span> Logs
-                </div>
-                <div class="nav-item" onclick="showPage('settings')" data-short="Set">
-                    <span>⚙️</span> Settings
-                </div>
-            </div>
-        </aside>
-        
-        <main class="main">
-            <!-- Dashboard Page -->
-            <div id="dashboard" class="page active">
+    <nav class="nav">
+        <button class="nav-item active" onclick="showPage('dashboard')">
+            <span>📊</span>Dash
+        </button>
+        <button class="nav-item" onclick="showPage('trades')">
+            <span>📈</span>Trades
+        </button>
+        <button class="nav-item" onclick="showPage('broker')">
+            <span>🏦</span>Broker
+        </button>
+        <button class="nav-item" onclick="showPage('settings')">
+            <span>⚙️</span>Settings
+        </button>
+    </nav>
+    
+    <main class="main">
+        <!-- Dashboard -->
+        <div id="dashboard" class="page active">
+            <div class="card">
+                <div class="card-title">Account Overview</div>
                 <div class="stats-grid">
-                    <div class="stat-card">
+                    <div class="stat">
+                        <div class="stat-value" id="total-pnl">$0</div>
                         <div class="stat-label">Total P&L</div>
-                        <div class="stat-value positive" id="total-pnl">$0.00</div>
-                        <div class="stat-change">All time</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Daily P&L</div>
-                        <div class="stat-value" id="daily-pnl">$0.00</div>
-                        <div class="stat-change">Today</div>
+                    <div class="stat">
+                        <div class="stat-value" id="daily-pnl">$0</div>
+                        <div class="stat-label">Daily</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Win Rate</div>
+                    <div class="stat">
+                        <div class="stat-value" id="positions-count">0</div>
+                        <div class="stat-label">Positions</div>
+                    </div>
+                    <div class="stat">
                         <div class="stat-value" id="win-rate">0%</div>
-                        <div class="stat-change">Based on closed trades</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Open Positions</div>
-                        <div class="stat-value" id="open-count">0</div>
-                        <div class="stat-change">Active trades</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Total Trades</div>
-                        <div class="stat-value" id="total-trades">0</div>
-                        <div class="stat-change">Since start</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Active Broker</div>
-                        <div class="stat-value" id="active-broker" style="font-size: 1.2rem;">-</div>
-                        <div class="stat-change" id="broker-mode">-</div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Open Positions</span>
-                        <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh</button>
-                    </div>
-                    <div class="table-container">
-                        <table id="positions-table">
-                            <thead>
-                                <tr>
-                                    <th>Symbol</th>
-                                    <th>Side</th>
-                                    <th>Quantity</th>
-                                    <th>Entry Price</th>
-                                    <th>Stop Loss</th>
-                                    <th>Take Profit</th>
-                                    <th>P&L</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td colspan="8" class="empty-state">No open positions</td></tr>
-                            </tbody>
-                        </table>
+                        <div class="stat-label">Win Rate</div>
                     </div>
                 </div>
             </div>
             
-            <!-- Positions Page -->
-            <div id="positions" class="page">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">All Positions</span>
-                        <div>
-                            <button class="btn btn-danger" onclick="closeAllPositions()">Close All</button>
-                            <button class="btn btn-secondary" onclick="refreshData()">Refresh</button>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table id="all-positions-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Symbol</th>
-                                    <th>Side</th>
-                                    <th>Qty</th>
-                                    <th>Entry</th>
-                                    <th>Current</th>
-                                    <th>Stop</th>
-                                    <th>Target</th>
-                                    <th>P&L</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+            <div class="card">
+                <div class="card-title">Open Positions</div>
+                <div id="positions-list">
+                    <div class="empty">No open positions</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trades -->
+        <div id="trades" class="page">
+            <div class="card">
+                <div class="card-title">Trade History</div>
+                <div id="trades-list">
+                    <div class="empty">No trades yet</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Broker -->
+        <div id="broker" class="page">
+            <div class="card">
+                <div class="card-title">Connect Broker</div>
+                
+                <div class="form-group">
+                    <label>Broker</label>
+                    <select id="broker-type">
+                        <option value="tradovate">Tradovate</option>
+                        <option value="tradestation">TradeStation</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="broker-user" placeholder="your-username">
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="broker-pass" placeholder="your-password">
+                </div>
+                
+                <button class="btn" onclick="connectBroker()">Connect</button>
+                
+                <div id="broker-result" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+        
+        <!-- Settings -->
+        <div id="settings" class="page">
+            <div class="card">
+                <div class="card-title">Position Sizing</div>
+                
+                <div class="form-group">
+                    <label>Sizing Mode</label>
+                    <select id="sizing-mode">
+                        <option value="fixed">Fixed Contracts</option>
+                        <option value="risk" selected>Risk-Based</option>
+                        <option value="percent">Percent of Account</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Risk Per Trade (%)</label>
+                    <input type="number" id="risk-pct" value="2" min="0.1" max="10" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label>Account Size ($)</label>
+                    <input type="number" id="account-size" value="10000" min="1000">
                 </div>
             </div>
             
-            <!-- History Page -->
-            <div id="history" class="page">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Trade History</span>
-                        <button class="btn btn-secondary" onclick="exportHistory()">📥 Export CSV</button>
-                    </div>
-                    <div class="table-container">
-                        <table id="history-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Symbol</th>
-                                    <th>Side</th>
-                                    <th>Qty</th>
-                                    <th>Entry</th>
-                                    <th>Exit</th>
-                                    <th>P&L</th>
-                                    <th>Strategy</th>
-                                    <th>Broker</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+            <div class="card">
+                <div class="card-title">Risk Limits</div>
+                
+                <div class="form-group">
+                    <label>Max Positions</label>
+                    <input type="number" id="max-pos" value="5" min="1" max="20">
+                </div>
+                
+                <div class="form-group">
+                    <label>Max Daily Loss (%)</label>
+                    <input type="number" id="max-loss" value="5" min="1" max="20">
+                </div>
+                
+                <div class="toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="bracket-orders" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Bracket Orders</span>
                 </div>
             </div>
             
-            <!-- Brokers Page -->
-            <div id="brokers" class="page">
-                <div class="alert alert-info">
-                    <span>ℹ️</span>
-                    Connect your broker account to start trading. Credentials are stored securely.
-                </div>
-                
-                <!-- Connection Status -->
-                <div class="card" id="broker-status-card">
-                    <div class="card-header">
-                        <span class="card-title">Connection Status</span>
-                        <span id="connection-badge" class="badge" style="background: var(--bg-hover); color: var(--text-secondary);">Disconnected</span>
-                    </div>
-                    <p id="broker-status-text" style="color: var(--text-secondary);">
-                        No broker connected. Configure below to connect.
-                    </p>
-                </div>
-                
-                <!-- Tradovate Configuration -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">🏦 Tradovate</span>
-                        <span class="badge" style="background: rgba(0, 255, 136, 0.15); color: var(--accent-green);">Recommended</span>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" id="tradovate-username" placeholder="your-username">
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" id="tradovate-password" placeholder="your-password">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Account ID (optional)</label>
-                            <input type="text" id="tradovate-account" placeholder="Auto-detect">
-                        </div>
-                        <div class="form-group">
-                            <label>Mode</label>
-                            <select id="tradovate-demo">
-                                <option value="true">Demo/Paper Trading</option>
-                                <option value="false">Live Trading</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1rem;">
-                        <button class="btn btn-success" onclick="connectTradovate()">
-                            🔗 Connect Tradovate
-                        </button>
-                    </div>
-                    
-                    <div id="tradovate-result" style="margin-top: 1rem; display: none;"></div>
-                </div>
-                
-                <!-- TradeStation Configuration -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">🏛️ TradeStation</span>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>API Key</label>
-                            <input type="text" id="ts-api-key" placeholder="your-api-key">
-                        </div>
-                        <div class="form-group">
-                            <label>API Secret</label>
-                            <input type="password" id="ts-api-secret" placeholder="your-api-secret">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Account ID</label>
-                            <input type="text" id="ts-account" placeholder="your-account-id">
-                        </div>
-                        <div class="form-group">
-                            <label>Refresh Token (optional)</label>
-                            <input type="text" id="ts-refresh" placeholder="your-refresh-token">
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1rem;">
-                        <button class="btn btn-primary" onclick="connectTradeStation()">
-                            🔗 Connect TradeStation
-                        </button>
-                    </div>
-                    
-                    <div id="ts-result" style="margin-top: 1rem; display: none;"></div>
-                </div>
-            </div>
-            
-            <!-- Strategies Page -->
-            <div id="strategies" class="page">
-                <div class="alert alert-info">
-                    <span>ℹ️</span>
-                    Create custom strategies with filters and risk settings.
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">🧠 Strategy Configuration</span>
-                        <button class="btn btn-primary" onclick="showAddStrategyModal()">+ Add Strategy</button>
-                    </div>
-                    
-                    <div id="strategies-list">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">🧠</div>
-                            <p>No strategies configured</p>
-                            <p style="font-size: 0.875rem; margin-top: 0.5rem;">Add a strategy to start trading with custom rules</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Add Strategy Modal -->
-                <div id="strategy-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
-                    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                            <h3>Add New Strategy</h3>
-                            <button onclick="closeStrategyModal()" style="background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;">×</button>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Strategy Name</label>
-                            <input type="text" id="strategy-name" placeholder="e.g., LuxMACD Breakout">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Symbols (comma separated)</label>
-                            <input type="text" id="strategy-symbols" placeholder="MNQ, MES, NQ">
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Risk Per Trade (%)</label>
-                                <input type="number" id="strategy-risk" value="2" min="0.1" max="10" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label>Max Positions</label>
-                                <input type="number" id="strategy-max-pos" value="3" min="1" max="10">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Min Risk:Reward</label>
-                            <input type="number" id="strategy-min-rr" value="1.5" min="1" max="5" step="0.1">
-                        </div>
-                        
-                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
-                            <button class="btn btn-secondary" onclick="closeStrategyModal()" style="flex: 1;">Cancel</button>
-                            <button class="btn btn-primary" onclick="saveStrategy()" style="flex: 1;">Save Strategy</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Risk Settings Page -->
-            <div id="risk" class="page">
-                <!-- Position Sizing -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">💰 Position Sizing</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Sizing Mode</label>
-                        <select id="sizing-mode" onchange="updateSizingHelp()">
-                            <option value="fixed">Fixed Contracts</option>
-                            <option value="risk" selected>Risk-Based (% of account)</option>
-                            <option value="percent">Percent of Account</option>
-                            <option value="kelly">Kelly Criterion</option>
-                        </select>
-                        <p id="sizing-help" style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.5rem;">
-                            Calculates contracts based on stop loss distance to risk fixed % per trade
-                        </p>
-                    </div>
-                    
-                    <div class="form-row" id="risk-inputs">
-                        <div class="form-group">
-                            <label>Risk Per Trade (%)</label>
-                            <input type="number" id="risk-per-trade" value="2" min="0.1" max="10" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Fixed Quantity</label>
-                            <input type="number" id="fixed-qty" value="1" min="1">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Risk Limits -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">🛡️ Risk Limits</span>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Max Positions</label>
-                            <input type="number" id="max-positions" value="5" min="1" max="20">
-                        </div>
-                        <div class="form-group">
-                            <label>Max Daily Loss (%)</label>
-                            <input type="number" id="max-daily-loss" value="5" min="1" max="20" step="0.5">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Max Trades Per Hour</label>
-                            <input type="number" id="max-trades-hour" value="10" min="1" max="50">
-                        </div>
-                        <div class="form-group">
-                            <label>Trade Cooldown (min)</label>
-                            <input type="number" id="cooldown" value="0" min="0" max="60">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Min Risk:Reward</label>
-                            <input type="number" id="min-rr" value="1.5" min="1" max="5" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>Max Spread %</label>
-                            <input type="number" id="max-spread" value="0.1" min="0.01" max="1" step="0.01">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Order Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">📊 Order Settings</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Default Order Type</label>
-                        <select id="order-type">
-                            <option value="Market">Market</option>
-                            <option value="Limit">Limit</option>
-                        </select>
-                    </div>
-                    
-                    <div class="toggle" style="margin-top: 1rem;">
-                        <label class="switch">
-                            <input type="checkbox" id="use-bracket" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <span>Bracket Orders (Entry + Stop + Target)</span>
-                    </div>
-                    
-                    <div class="toggle" style="margin-top: 1rem;">
-                        <label class="switch">
-                            <input type="checkbox" id="use-trailing">
-                            <span class="slider"></span>
-                        </label>
-                        <span>Trailing Stop</span>
-                    </div>
-                    
-                    <div class="form-group" style="margin-top: 1rem;">
-                        <label>Trailing Stop %</label>
-                        <input type="number" id="trailing-pct" value="1" min="0.1" max="5" step="0.1">
-                    </div>
-                </div>
-                
-                <!-- Time Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">⏰ Time Settings</span>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Trading Start</label>
-                            <input type="time" id="trade-start" value="09:30">
-                        </div>
-                        <div class="form-group">
-                            <label>Trading End</label>
-                            <input type="time" id="trade-end" value="16:00">
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="btn btn-success" onclick="saveRiskSettings()" style="width: 100%; margin-top: 1rem;">
-                    💾 Save All Settings
-                </button>
-            </div>
-            
-            <!-- Webhook Tester Page -->
-            <div id="webhook" class="page">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Webhook Tester</span>
-                        <div>
-                            <button class="btn btn-secondary" onclick="loadExample()">Load Example</button>
-                            <button class="btn btn-primary" onclick="sendWebhook()">Send Test</button>
-                        </div>
-                    </div>
-                    
-                    <div class="webhook-tester">
-                        <div class="form-group">
-                            <label>Webhook URL</label>
-                            <input type="text" id="webhook-url" value="http://localhost:5000/webhook" readonly>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>JSON Payload</label>
-                            <textarea class="json-editor" id="webhook-payload">{
-  "secret": "your-webhook-secret",
-  "symbol": "MNQ",
-  "side": "LONG",
-  "price": 24368.00,
-  "stop_loss": 24200.00,
-  "take_profit": 24500.00,
-  "strategy": "LuxMACD"
-}</textarea>
-                        </div>
-                        
-                        <div class="response-box" id="webhook-response">
-                            // Response will appear here...
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Logs Page -->
-            <div id="logs" class="page">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">System Logs</span>
-                        <button class="btn btn-secondary" onclick="refreshLogs()">🔄 Refresh</button>
-                    </div>
-                    <div class="response-box" id="logs-content" style="min-height: 400px; max-height: 600px; overflow-y: auto;">
-                        // Logs will appear here...
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Settings Page -->
-            <div id="settings" class="page">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">General Settings</span>
-                        <button class="btn btn-primary" onclick="saveSettings()">💾 Save</button>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Webhook Secret Key</label>
-                        <input type="password" id="webhook-secret" value="">
-                        <small style="color: var(--text-secondary);">Used to verify TradingView webhooks</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Account Size ($)</label>
-                        <input type="number" id="account-size" value="10000">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Server Port</label>
-                        <input type="number" id="server-port" value="5000">
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Notifications</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Discord Webhook URL</label>
-                        <input type="text" id="discord-webhook" placeholder="https://discord.com/api/webhooks/...">
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Telegram Bot Token</label>
-                            <input type="text" id="telegram-token" placeholder="123456:ABC-DEF...">
-                        </div>
-                        <div class="form-group">
-                            <label>Telegram Chat ID</label>
-                            <input type="text" id="telegram-chat" placeholder="@channelname or ID">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+            <button class="btn btn-success" onclick="saveSettings()">Save Settings</button>
+        </div>
+    </main>
     
     <script>
-        // Page navigation
+        // Navigation
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             event.target.closest('.nav-item').classList.add('active');
-            
-            // Load data for specific pages
-            if (pageId === 'dashboard' || pageId === 'positions') refreshData();
-            if (pageId === 'brokers') loadBrokers();
-            if (pageId === 'logs') refreshLogs();
         }
         
-        // Fetch status from API
-        async function refreshData() {
+        // Load data
+        async function loadData() {
             try {
-                const res = await fetch('/status');
+                const res = await fetch('/api/status');
                 const data = await res.json();
                 
-                // Update stats
-                document.getElementById('total-pnl').textContent = '$' + data.stats.total_pnl.toFixed(2);
-                document.getElementById('daily-pnl').textContent = '$' + data.stats.daily_pnl.toFixed(2);
-                document.getElementById('win-rate').textContent = (data.stats.win_rate * 100).toFixed(1) + '%';
-                document.getElementById('open-count').textContent = data.stats.open_positions;
-                document.getElementById('total-trades').textContent = data.stats.total_trades;
-                document.getElementById('active-broker').textContent = data.active_broker || '-';
-                
-                // Update positions table
-                updatePositionsTable(data.positions);
-                
+                document.getElementById('positions-count').textContent = data.positions;
             } catch (e) {
-                console.error('Failed to refresh:', e);
+                console.error('Failed to load:', e);
             }
         }
         
-        function updatePositionsTable(positions) {
-            const tbody = document.querySelector('#positions-table tbody');
-            const keys = Object.keys(positions);
+        // Connect broker
+        async function connectBroker() {
+            const type = document.getElementById('broker-type').value;
+            const user = document.getElementById('broker-user').value;
+            const pass = document.getElementById('broker-pass').value;
+            const result = document.getElementById('broker-result');
             
-            if (keys.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No open positions</td></tr>';
+            if (!user || !pass) {
+                result.innerHTML = '<div style="color: var(--red);">Enter credentials</div>';
                 return;
             }
             
-            tbody.innerHTML = keys.map(key => {
-                const p = positions[key];
-                const pnlClass = p.pnl >= 0 ? 'positive' : 'negative';
-                return `
-                    <tr>
-                        <td>${p.symbol}</td>
-                        <td><span class="badge badge-${p.side.toLowerCase()}">${p.side}</span></td>
-                        <td>${p.quantity}</td>
-                        <td>$${p.entry_price.toFixed(2)}</td>
-                        <td>$${p.stop_loss ? p.stop_loss.toFixed(2) : '-'}</td>
-                        <td>$${p.take_profit ? p.take_profit.toFixed(2) : '-'}</td>
-                        <td class="${pnlClass}">$${p.pnl.toFixed(2)}</td>
-                        <td>${new Date(p.timestamp).toLocaleTimeString()}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
-        
-        // Load broker cards
-        async function loadBrokers() {
-            try {
-                const res = await fetch('/brokers');
-                const data = await res.json();
-                
-                const grid = document.getElementById('broker-grid');
-                grid.innerHTML = data.registered.map(broker => {
-                    const isActive = data.active === broker;
-                    const isConfigured = data.configured.includes(broker);
-                    
-                    return `
-                        <div class="broker-card ${isActive ? 'active' : ''}">
-                            <div class="broker-header">
-                                <span class="broker-name">${broker.charAt(0).toUpperCase() + broker.slice(1)}</span>
-                                <span class="broker-status ${isConfigured ? 'connected' : ''}">
-                                    ${isConfigured ? '● Connected' : '○ Not Configured'}
-                                </span>
-                            </div>
-                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                                ${getBrokerDescription(broker)}
-                            </p>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn ${isActive ? 'btn-success' : 'btn-secondary'}" 
-                                        onclick="setActiveBroker('${broker}')"
-                                        ${!isConfigured ? 'disabled' : ''}>
-                                    ${isActive ? '✓ Active' : 'Activate'}
-                                </button>
-                                <button class="btn btn-secondary" onclick="configureBroker('${broker}')">
-                                    Configure
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (e) {
-                console.error('Failed to load brokers:', e);
-            }
-        }
-        
-        function getBrokerDescription(broker) {
-            const descs = {
-                'tradovate': 'Futures broker with simple username/password auth. Lower commissions.',
-                'tradestation': 'Advanced futures broker with OAuth2. More features.'
-            };
-            return descs[broker] || 'Custom broker configuration';
-        }
-        
-        // Broker Configuration Functions
-        async function connectTradovate() {
-            const username = document.getElementById('tradovate-username').value;
-            const password = document.getElementById('tradovate-password').value;
-            const account = document.getElementById('tradovate-account').value;
-            const demo = document.getElementById('tradovate-demo').value === 'true';
-            const resultDiv = document.getElementById('tradovate-result');
-            
-            if (!username || !password) {
-                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ Username and password required</div>';
-                resultDiv.style.display = 'block';
-                return;
-            }
-            
-            resultDiv.innerHTML = '<div class="alert alert-info">⏳ Connecting to Tradovate...</div>';
-            resultDiv.style.display = 'block';
+            result.innerHTML = 'Connecting...';
             
             try {
-                const res = await fetch('/configure/broker', {
+                const res = await fetch('/api/broker/connect', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        broker_type: 'tradovate',
-                        username: username,
-                        password: password,
-                        account_id: account,
-                        demo: demo
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({type, username: user, password: pass})
                 });
                 
                 const data = await res.json();
-                
-                if (data.status === 'success') {
-                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(0,255,136,0.15); color: var(--accent-green);">✅ ' + data.message + '</div>';
-                    updateConnectionStatus('tradovate', 'Connected');
-                } else {
-                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ ' + data.message + '</div>';
-                }
+                result.innerHTML = data.status === 'success' 
+                    ? '<div style="color: var(--green);">✓ Connected</div>'
+                    : '<div style="color: var(--red);">✗ ' + data.message + '</div>';
             } catch (e) {
-                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ Error: ' + e.message + '</div>';
+                result.innerHTML = '<div style="color: var(--red);">Error</div>';
             }
         }
         
-        async function connectTradeStation() {
-            const apiKey = document.getElementById('ts-api-key').value;
-            const apiSecret = document.getElementById('ts-api-secret').value;
-            const account = document.getElementById('ts-account').value;
-            const refresh = document.getElementById('ts-refresh').value;
-            const resultDiv = document.getElementById('ts-result');
+        // Save settings
+        async function saveSettings() {
+            const btn = event.target;
+            const original = btn.textContent;
             
-            if (!apiKey || !apiSecret) {
-                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ API key and secret required</div>';
-                resultDiv.style.display = 'block';
-                return;
-            }
-            
-            resultDiv.innerHTML = '<div class="alert alert-info">⏳ Connecting to TradeStation...</div>';
-            resultDiv.style.display = 'block';
-            
-            try {
-                const res = await fetch('/configure/broker', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        broker_type: 'tradestation',
-                        api_key: apiKey,
-                        api_secret: apiSecret,
-                        account_id: account,
-                        refresh_token: refresh,
-                        demo: true
-                    })
-                });
-                
-                const data = await res.json();
-                
-                if (data.status === 'success') {
-                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(0,255,136,0.15); color: var(--accent-green);">✅ ' + data.message + '</div>';
-                    updateConnectionStatus('tradestation', 'Connected');
-                } else {
-                    resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ ' + data.message + '</div>';
-                }
-            } catch (e) {
-                resultDiv.innerHTML = '<div class="alert" style="background: rgba(255,68,68,0.15); color: var(--accent-red);">❌ Error: ' + e.message + '</div>';
-            }
-        }
-        
-        function updateConnectionStatus(broker, status) {
-            const badge = document.getElementById('connection-badge');
-            const text = document.getElementById('broker-status-text');
-            
-            badge.textContent = status;
-            badge.style.background = 'rgba(0, 255, 136, 0.15)';
-            badge.style.color = 'var(--accent-green)';
-            text.textContent = broker.charAt(0).toUpperCase() + broker.slice(1) + ' is connected and ready to trade.';
-            text.style.color = 'var(--text-primary)';
-        }
-        
-        // Webhook tester
-        function loadExample() {
-            document.getElementById('webhook-payload').value = JSON.stringify({
-                secret: "your-webhook-secret",
-                symbol: "MNQ",
-                side: "LONG",
-                price: 24368.00,
-                stop_loss: 24200.00,
-                take_profit: 24500.00,
-                strategy: "LuxMACD"
-            }, null, 2);
-        }
-        
-        async function sendWebhook() {
-            try {
-                const payload = document.getElementById('webhook-payload').value;
-                const res = await fetch('/webhook', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: payload
-                });
-                const data = await res.json();
-                document.getElementById('webhook-response').textContent = JSON.stringify(data, null, 2);
-            } catch (e) {
-                document.getElementById('webhook-response').textContent = 'Error: ' + e.message;
-            }
-        }
-        
-        // Logs
-        async function refreshLogs() {
-            // In a real implementation, this would fetch from an API endpoint
-            document.getElementById('logs-content').textContent = 
-                new Date().toISOString() + ' - Logs would appear here...\\n' +
-                'To implement: Add /logs endpoint to server that reads trades.log';
-        }
-        
-        // Auto-refresh dashboard
-        setInterval(() => {
-            if (document.getElementById('dashboard').classList.contains('active')) {
-                refreshData();
-            }
-        }, 5000);
-        
-        
-        // Strategy Functions
-        let strategies = [];
-        
-        function updateSizingHelp() {
-            const mode = document.getElementById('sizing-mode').value;
-            const help = document.getElementById('sizing-help');
-            
-            const helps = {
-                'fixed': 'Trade fixed number of contracts every time',
-                'risk': 'Calculate contracts based on stop loss to risk fixed % of account',
-                'percent': 'Use fixed % of account for each position',
-                'kelly': 'Use Kelly Criterion for optimal position sizing'
-            };
-            
-            help.textContent = helps[mode] || '';
-        }
-        
-        function showAddStrategyModal() {
-            document.getElementById('strategy-modal').style.display = 'flex';
-        }
-        
-        function closeStrategyModal() {
-            document.getElementById('strategy-modal').style.display = 'none';
-        }
-        
-        function saveStrategy() {
-            const name = document.getElementById('strategy-name').value;
-            const symbols = document.getElementById('strategy-symbols').value;
-            const risk = document.getElementById('strategy-risk').value;
-            const maxPos = document.getElementById('strategy-max-pos').value;
-            const minRR = document.getElementById('strategy-min-rr').value;
-            
-            if (!name) {
-                alert('Strategy name required');
-                return;
-            }
-            
-            const strategy = {
-                id: Date.now(),
-                name: name,
-                symbols: symbols.split(',').map(s => s.trim()).filter(s => s),
-                risk_per_trade: parseFloat(risk),
-                max_positions: parseInt(maxPos),
-                min_risk_reward: parseFloat(minRR),
-                enabled: true
-            };
-            
-            strategies.push(strategy);
-            renderStrategies();
-            closeStrategyModal();
-            
-            document.getElementById('strategy-name').value = '';
-            document.getElementById('strategy-symbols').value = '';
-        }
-        
-        function renderStrategies() {
-            const container = document.getElementById('strategies-list');
-            
-            if (strategies.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🧠</div>
-                        <p>No strategies configured</p>
-                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Add a strategy to start trading with custom rules</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = strategies.map(s => `
-                <div class="card" style="margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                        <h4>${s.name}</h4>
-                        <span class="badge ${s.enabled ? 'badge-long' : ''}">${s.enabled ? 'Enabled' : 'Disabled'}</span>
-                    </div>
-                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">
-                        Symbols: ${s.symbols.join(', ') || 'All'}
-                    </p>
-                    <p style="color: var(--text-secondary); font-size: 0.875rem;">
-                        Risk: ${s.risk_per_trade}% | Max Pos: ${s.max_positions} | Min R:R ${s.min_risk_reward}
-                    </p>
-                </div>
-            `).join('');
-        }
-        
-        // Risk Settings
-        function saveRiskSettings() {
-            const btn = document.querySelector('#risk .btn-primary');
-            const originalText = btn.textContent;
-            btn.textContent = '✅ Saved!';
-            btn.style.background = 'var(--accent-green)';
-            btn.style.color = '#000';
+            btn.textContent = 'Saved!';
+            btn.style.background = 'var(--green)';
+            btn.style.color = 'black';
             
             setTimeout(() => {
-                btn.textContent = originalText;
+                btn.textContent = original;
                 btn.style.background = '';
                 btn.style.color = '';
-            }, 2000);
+            }, 1500);
         }
         
-        // Settings
-        function saveSettings() {
-            const btn = document.querySelector('#settings .btn-primary');
-            const originalText = btn.textContent;
-            btn.textContent = '✅ Saved!';
-            btn.style.background = 'var(--accent-green)';
-            btn.style.color = '#000';
-            
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.background = '';
-                btn.style.color = '';
-            }, 2000);
-        }
-        
-        // Close modal on escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeStrategyModal();
-            }
-        });
-        
-        // Logs
-        async function refreshLogs() {
-            const now = new Date().toISOString();
-            const connectionStatus = document.getElementById('connection-badge')?.textContent || 'Unknown';
-            
-            document.getElementById('logs-content').textContent = 
-                `${now} - System online
-` +
-                `Server: Running
-` +
-                `Broker: ${connectionStatus}
-` +
-                `Active Trades: 0
-` +
-                `Total Trades: 0
-` +
-                `---
-` +
-                `Server ready to accept TradingView webhooks`;
-        }
-        
-        // Updated initial load
-        refreshData();
-        renderStrategies();
-
-
+        // Initial load
+        loadData();
+        setInterval(loadData, 5000);
     </script>
 </body>
 </html>
